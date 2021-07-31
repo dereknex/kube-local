@@ -3,6 +3,7 @@ from pathlib import Path
 import requests
 import validators
 import re
+import hashlib
 
 default_local_path = "temp/"
 chunk_size = 128
@@ -28,17 +29,22 @@ class HTTPInput(Input):
 
         
 
-    def download(self, url) -> None:
+    def download(self, url, sha256sum=None) -> bool:
         if not validators.url(url):
             raise ValueError(url)
         self.local_path = self._ensure_local_path(self.local_path)
         r = requests.get(url, stream=True)
         fname = self._get_filename(url, r)
         p = Path(self.local_path).joinpath(fname)
+        if sha256sum is not None:
+            sha256_hash = hashlib.sha256()
         with open(p, 'wb') as f:
             for chunk in r.iter_content(chunk_size=chunk_size):
                 f.write(chunk)
+                if sha256sum is not None:
+                    sha256_hash.update(chunk)
             f.close()
+        return sha256sum == None or sha256_hash.hexdigest() == sha256sum
 
 
         
