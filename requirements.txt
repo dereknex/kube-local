@@ -4,3 +4,4 @@ requests==2.26.0
 validators==0.18.2
 minio==7.1.0
 rich==10.6.0
+PyYAML==5.4.1
