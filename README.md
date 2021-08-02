@@ -1,0 +1,2 @@
+# kube-local
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e4637c9b4f2c44f39ec4a09d2933a479)](https://app.codacy.com/gh/dereknex/kube-local?utm_source=github.com&utm_medium=referral&utm_content=dereknex/kube-local&utm_campaign=Badge_Grade_Settings)
