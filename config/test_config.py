@@ -71,5 +71,3 @@ class TestConfiguration(unittest.TestCase):
         self.assertEqual(o.access_key_secret, "bar")
         self.assertEqual(o.endpoint, "localhost:9000")
         self.assertFalse(o.secure)
-    
-        
