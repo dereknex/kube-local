@@ -1,3 +1,3 @@
-class Input:
-    def download(self) -> None:
-        raise NotImplementedError()
+from input.http import HTTPInput
+
+

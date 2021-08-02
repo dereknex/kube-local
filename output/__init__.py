@@ -1,3 +1,1 @@
-class Output:
-    def upload(self) -> None:
-        raise NotImplementedError()
+from output.s3 import S3Output

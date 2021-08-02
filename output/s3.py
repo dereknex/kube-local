@@ -1,4 +1,4 @@
-from output import Output
+from output.base import Output
 from minio import Minio
 from pathlib import Path
 
@@ -8,6 +8,9 @@ class S3Output(Output):
     endpoint = None
     bucket = None
     secure = True
+
+    def __init__(self, **kwargs):
+       self.__dict__.update(kwargs) 
 
     def upload(self, local_path, remote_prefix) -> None:
         client = Minio(self.endpoint, self.access_key, self.access_key_secret, secure=self.secure)

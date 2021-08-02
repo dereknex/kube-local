@@ -1,4 +1,4 @@
-from input import Input
+from input.base import Input
 from pathlib import Path
 import requests
 import validators
@@ -10,6 +10,9 @@ chunk_size = 128
 
 class HTTPInput(Input):
     local_path = None
+
+    def __init__(self, **kwargs):
+       self.__dict__.update(kwargs) 
 
     def _ensure_local_path(self, path) -> str:
         if path is None or path == "":
