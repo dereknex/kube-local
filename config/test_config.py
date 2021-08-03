@@ -20,8 +20,8 @@ class TestConfiguration(unittest.TestCase):
         c = Configuration(f.name)
         self.assertEqual("temp/", c.local_path)
         self.assertTrue(c.auto_clean)
-        self.assertListEqual(c.inputs, [])
-        self.assertListEqual(c.outputs, [])
+        self.assertEqual(c.inputs, {})
+        self.assertEqual(c.outputs, {})
         self.assertListEqual(c.tasks, [])
 
     def test_load_inputs(self):
@@ -38,8 +38,8 @@ class TestConfiguration(unittest.TestCase):
         f.writelines(data)
         f.flush()
         c = Configuration(f.name)
-        self.assertEqual(1, len(c.inputs))
-        i = c.inputs[0]
+        self.assertEqual(1, len(c.inputs.keys()))
+        i = c.inputs['kubernetes']
         self.assertIsInstance(i, HTTPInput)
         self.assertEqual(i.name, "kubernetes")
 
@@ -62,8 +62,8 @@ class TestConfiguration(unittest.TestCase):
         f.writelines(data)
         f.flush()
         c = Configuration(f.name)
-        self.assertEqual(1, len(c.outputs))
-        o = c.outputs[0]
+        self.assertEqual(1, len(c.outputs.keys()))
+        o = c.outputs['kubernetes']
         self.assertIsInstance(o, S3Output)
         self.assertEqual(o.name, "kubernetes")
         self.assertEqual(o.bucket, "kubernetes")
