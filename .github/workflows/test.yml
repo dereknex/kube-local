@@ -21,7 +21,7 @@ jobs:
         options: --name minio-server
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.9]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -43,9 +43,6 @@ jobs:
           python -m unittest discover
           coverage run --source=config,task,input,output -m unittest discover -v
           coverage xml
-          pwd
-          ls -la
-      - uses: actions/checkout@main
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
