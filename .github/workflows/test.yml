@@ -10,6 +10,15 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      minio:
+        image: bitnami/minio:latest
+        env:
+          MINIO_ACCESS_KEY: dev_stack
+          MINIO_SECRET_KEY: dev_stack
+        ports:
+          - 9000:9000
+        options: --name minio-server
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9]
