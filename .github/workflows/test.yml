@@ -43,6 +43,8 @@ jobs:
           python -m unittest discover
           coverage run --source=config,task,input,output -m unittest discover -v
           coverage xml
+          pwd
+          ls -la
       - uses: actions/checkout@main
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
