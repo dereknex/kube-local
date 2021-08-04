@@ -42,13 +42,13 @@ jobs:
         run: |
           python -m unittest discover
           coverage run --source=config,task,input,output -m unittest discover -v
-          coverage xml
+          coverage xml -o cobertura.xml
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           # or
           # api-token: ${{ secrets.CODACY_API_TOKEN }}
-          coverage-reports: coverage.xml
+          coverage-reports: cobertura.xml
       
 
