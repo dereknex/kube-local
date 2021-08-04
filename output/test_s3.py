@@ -13,4 +13,6 @@ class TestS3Output(unittest.TestCase):
         f = tempfile.NamedTemporaryFile()
         f.write(b'Text file contents')
         f.flush()
-        o.upload(f.name, "foo/")
+        o.remote_prefix = "foo/"
+        o.local_path = f.name
+        o.upload()

@@ -51,3 +51,4 @@ class Configuration:
     def _load_tasks(self, node):
         if node is None:
             return
+        self.tasks = node

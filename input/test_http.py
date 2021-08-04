@@ -32,7 +32,8 @@ class TestHTTPInput(unittest.TestCase):
         i = http.HTTPInput()
         checksum = "226ba1072f20e4ff97ee4f94e87bf45538a900a6d9b25399a7ac3dc5a2f3af87"
         url = "https://repo.huaweicloud.com/kubernetes/apt/doc/apt-key.gpg"
-        done = i.download(url)
+        i.url = url
+        done = i.download()
         self.assertTrue(done)
         sha256_hash = hashlib.sha256()
         with open("temp/apt-key.gpg", "rb") as f:

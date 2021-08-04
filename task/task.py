@@ -9,23 +9,5 @@ class Task(object):
         self.out_obj = output
 
     def run(self):
-        raise NotImplementedError()
-
-
-# class TaskTemplate(object):
-#     input_tpl = None
-#     output_tpl = None
-#     items = []
-#     name = None
-
-#     def _render_item(self, item):
-#         pass
-
-#     def render(self):
-#         if self.items.count() == 0 :
-#             return [Task(self.name, self.input_tpl, self.output_tpl)]
-#         tasks = []
-#         for i in self.items:
-#             tasks.append(self._render_item(i))
-#         return tasks
-
+       self.in_obj.download()
+       self.out_obj.upload() 
