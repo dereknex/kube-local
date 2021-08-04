@@ -15,12 +15,13 @@ class Manager:
     def __init__(self, cfg: Configuration):
         self.cfg = cfg
         self._console = Console()
+        self._tpl_env = Environment(loader=BaseLoader(), autoescape=True)
 
     def _extract_item(self, item, in_dict, out_dict):
         for k, v in in_dict.items():
-            in_dict[k] = Environment(loader=BaseLoader(), autoescape=True).from_string(v).render(**item)
+            in_dict[k] = self._tpl_env.from_string(v).render(**item)
         for k, v in out_dict.items():
-            out_dict[k] = Environment(loader=BaseLoader(), autoescape=True).from_string(v).render(**item)
+            out_dict[k] = self._tpl_env.from_string(v).render(**item)
         i = copy.deepcopy(self.cfg.inputs[in_dict['name']])
         o = copy.deepcopy(self.cfg.outputs[out_dict['name']])
         i.__dict__.update(in_dict)
