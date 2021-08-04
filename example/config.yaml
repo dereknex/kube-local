@@ -1,0 +1,29 @@
+auto_clean: true
+local_path: temp/
+inputs:
+  - name: kubernetes
+    type: http
+outputs:
+  - name: kubernetes
+    type: s3
+    bucket: kubernetes
+    access_key: foo
+    access_key_secret: bar
+    endpoint: localhost:9000
+    secure: false
+tasks:
+  - name: kubectl
+    input: 
+      name: kubernetes
+      url: https://storage.googleapis.com/kubernetes-release/release/{{ version }}/bin/linux/{{ image_arch }}/kubectl
+      sha256sum: "{{ sha256sum }}"
+    output:
+      name: kubernetes
+      remote_prefix: "{{ version }}/linux/{{ image_arch }}/kubectl"
+    with_items:
+      - version: v1.21.3
+        sha256sum: 603b6e57c5546c079faee6b606014e83b95ea076146fbf73329f3069968f83bf
+        image_arch: arm
+      - version: v1.21.2
+        sha256sum: 898c2cd54b651873a8fb18bcb0792eb4772a78f845d758fa9b0eee278aede869
+        image_arch: arm
