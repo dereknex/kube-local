@@ -41,7 +41,7 @@ jobs:
       - name: Test with unittest
         run: |
           python -m unittest discover
-          coverage run --source=config,task,input,output -m unittest discover -v
+          coverage run --omit=".venv/*","test_*" -m unittest discover -v
           coverage xml -o cobertura.xml
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
