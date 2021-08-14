@@ -8,7 +8,7 @@ outputs:
     type: s3
     bucket: kubernetes
     access_key: foo
-    access_key_secret: bar
+    access_key_secret: bar12345
     endpoint: localhost:9000
     secure: false
 tasks:

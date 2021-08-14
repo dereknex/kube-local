@@ -16,6 +16,7 @@ class HTTPInput(Input):
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
+        self.local_path = HTTPInput._ensure_local_path(self.local_path)
 
     @staticmethod
     def _ensure_local_path(path) -> str:
@@ -37,7 +38,7 @@ class HTTPInput(Input):
     def download(self) -> bool:
         if not validators.url(self.url):
             raise ValueError(self.url)
-        self.local_path = HTTPInput._ensure_local_path(self.local_path)
+
         r = requests.get(self.url, stream=True)
         fname = self._get_filename(self.url, r)
         p = Path(self.local_path).joinpath(fname)

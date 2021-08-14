@@ -8,9 +8,8 @@ import copy
 
 
 class Manager:
-    
+
     _tasks = []
-    
 
     def __init__(self, cfg: Configuration):
         self.cfg = cfg
@@ -22,33 +21,35 @@ class Manager:
             in_dict[k] = self._tpl_env.from_string(v).render(**item)
         for k, v in out_dict.items():
             out_dict[k] = self._tpl_env.from_string(v).render(**item)
-        i = copy.deepcopy(self.cfg.inputs[in_dict['name']])
-        o = copy.deepcopy(self.cfg.outputs[out_dict['name']])
+        i = copy.deepcopy(self.cfg.inputs[in_dict["name"]])
+        o = copy.deepcopy(self.cfg.outputs[out_dict["name"]])
         i.__dict__.update(in_dict)
         o.__dict__.update(out_dict)
-        return  (i, o)
-             
+        return (i, o)
 
     def _generate_tasks(self):
         for t in self.cfg.tasks:
-            in_dict = t['input']
-            if in_dict['name']  not in self.cfg.inputs:
+            in_dict = t["input"]
+            if in_dict["name"] not in self.cfg.inputs:
                 raise InputNotFoundError(in_dict)
-            out_dict = t['output']
-            if out_dict['name'] not in self.cfg.outputs:
+            out_dict = t["output"]
+            if out_dict["name"] not in self.cfg.outputs:
                 raise OutputNotFoundError(out_dict)
             items = [{}]
-            if 'with_items' in t:
-                items = t['with_items']
-            for idx  in range(len(items)):
+            if "with_items" in t:
+                items = t["with_items"]
+            for idx in range(len(items)):
                 item = items[idx]
                 i, o = self._extract_item(item, copy.deepcopy(in_dict), copy.deepcopy(out_dict))
-                t_name = '{}[{}]'.format(t['name'], idx)
-                self._tasks.append(Task(t_name, i, o))
+                o.local_path = i.local_path
+                t_name = "{}[{}]".format(t["name"], idx)
+                t = Task(t_name, i, o)
+                self._tasks.append(t)
 
     def run(self):
+        self._console.print("Generating tasks...")
         self._generate_tasks()
         if (self._tasks) == 0:
             self._console.print("No tasks!", style="bold red")
-
-    
+        for t in self._tasks:
+            t.run()

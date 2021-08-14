@@ -1,4 +1,6 @@
 import click
+from config import Configuration
+from task import Manager
 
 
 @click.command()
@@ -6,10 +8,11 @@ import click
     "--config", envvar="CONFIG", default="/etc/kubespary/sync.yaml", help="Configuration for sync", type=click.Path()
 )
 def main(config):
-    pass
+    m = Manager(Configuration(config))
+    m.run()
 
 
 if __name__ == "__main__":
-	# pylint: disable=no-value-for-parameter
-	# pylint: disable=unexpected-keyword-arg
+    # pylint: disable=no-value-for-parameter
+    # pylint: disable=unexpected-keyword-arg
     main(auto_envvar_prefix="SYNC_")
