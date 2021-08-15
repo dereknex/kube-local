@@ -39,7 +39,7 @@ class TestConfiguration(unittest.TestCase):
         f.flush()
         c = Configuration(f.name)
         self.assertEqual(1, len(c.inputs.keys()))
-        i = c.inputs['kubernetes']
+        i = c.inputs["kubernetes"]
         self.assertIsInstance(i, HTTPInput)
         self.assertEqual(i.name, "kubernetes")
 
@@ -63,7 +63,7 @@ class TestConfiguration(unittest.TestCase):
         f.flush()
         c = Configuration(f.name)
         self.assertEqual(1, len(c.outputs.keys()))
-        o = c.outputs['kubernetes']
+        o = c.outputs["kubernetes"]
         self.assertIsInstance(o, S3Output)
         self.assertEqual(o.name, "kubernetes")
         self.assertEqual(o.bucket, "kubernetes")
