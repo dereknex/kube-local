@@ -4,7 +4,7 @@ from informer import Informer
 class Input(Informer):
     name = ""
 
-    def get_download_path(self):
+    def get_save_path(self):
         raise NotImplementedError()
 
     def download(self) -> None:
