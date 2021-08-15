@@ -7,12 +7,12 @@ import hashlib
 from urllib.parse import urlparse
 
 
-default_local_path = "temp/"
+default_save_dir = "temp/"
 chunk_size = 4096
 
 
 class HTTPInput(Input):
-    local_path = None
+    save_dir = None
     url = None
     sha256sum = None
     _total_size = 0
@@ -21,15 +21,16 @@ class HTTPInput(Input):
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-    def _ensure_local_path(self, path) -> str:
+    def _ensure_save_dir(self, path) -> str:
         if path is None or path == "":
-            path = default_local_path
+            path = default_save_dir
+        self.save_dir = path
         u = urlparse(self.url)
         prefix = str(u.path).rsplit("/", 1)[0]
         prefix = prefix.strip("/")
-        path = Path(path).joinpath(prefix)
-        path.mkdir(parents=True, exist_ok=True)
-        return path
+        full_path = Path(self.save_dir).joinpath(prefix)
+        full_path.mkdir(parents=True, exist_ok=True)
+        return full_path
 
     def _get_filename(self, url, resp) -> str:
         fheader = "Content-Disposition"
@@ -54,7 +55,7 @@ class HTTPInput(Input):
         fname = self._get_filename(self.url, r)
         r.close()
 
-        return Path(self._ensure_local_path(self.local_path)).joinpath(fname)
+        return Path(self._ensure_save_dir(self.save_dir)).joinpath(fname)
 
     def download(self) -> bool:
         if not validators.url(self.url):

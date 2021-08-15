@@ -8,14 +8,14 @@ import shutil
 
 
 class TestHTTPInput(unittest.TestCase):
-    def test_ensure_local_path(self):
+    def test_ensure_save_dir(self):
         i = http.HTTPInput()
         # p = i._ensure_local_path(None)
         # self.assertEqual(p, http.default_local_path)
         # Path(p).rmdir()
-
-        p = i._ensure_local_path("test_sync")
-        self.assertEqual(p, "test_sync")
+        i.url = "https://storage.googleapis.com/kubernetes-release/release/v1.21.3/bin/linux/amd64/kubectl"
+        p = str(i._ensure_save_dir("test_sync"))
+        self.assertEqual(p, "test_sync/kubernetes-release/release/v1.21.3/bin/linux/amd64")
         Path(p).rmdir()
 
     def test_get_filename(self):
@@ -36,9 +36,10 @@ class TestHTTPInput(unittest.TestCase):
         done = i.download()
         self.assertTrue(done)
         sha256_hash = hashlib.sha256()
-        with open("temp/apt-key.gpg", "rb") as f:
+        save_path = i.get_save_path()
+        with open(save_path, "rb") as f:
             for byte_block in iter(lambda: f.read(4096), b""):
                 sha256_hash.update(byte_block)
             f.close()
         self.assertEqual(sha256_hash.hexdigest(), checksum)
-        shutil.rmtree(i.local_path)
+        shutil.rmtree(i.save_dir)

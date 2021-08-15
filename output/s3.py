@@ -71,7 +71,9 @@ class S3Output(Output):
             client.make_bucket(self.bucket)
         filename = Path(self.local_path).name
         remote_path = Path(self.remote_prefix).joinpath(filename)
-        progress = Progress()
+        progress = None
+        if len(self._observers) > 0:
+            progress = Progress()
 
-        progress.watch(self)
+            progress.watch(self)
         client.fput_object(self.bucket, remote_path.as_posix(), self.local_path, progress=progress)

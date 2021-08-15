@@ -2,6 +2,7 @@ import unittest
 from output.s3 import S3Output
 import tempfile
 
+
 class TestS3Output(unittest.TestCase):
     def test_upload(self):
         o = S3Output()
@@ -11,8 +12,8 @@ class TestS3Output(unittest.TestCase):
         o.bucket = "test"
         o.secure = False
         f = tempfile.NamedTemporaryFile()
-        f.write(b'Text file contents')
+        f.write(b"Text file contents")
         f.flush()
         o.remote_prefix = "foo/"
-        o.local_path = f.name
+        o.set_local_path(f.name)
         o.upload()
