@@ -19,6 +19,10 @@ jobs:
         ports:
           - 9000:9000
         options: --name minio-server
+      registry:
+        image: registry:latest
+        ports:
+          - 5000:5000
     strategy:
       matrix:
         python-version: [3.9]
