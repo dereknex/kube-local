@@ -1,9 +1,9 @@
 import yaml
-from input import HTTPInput
-from output import S3Output
+from input import HTTPInput, DockerInput
+from output import S3Output, DockerOutput
 
-_inputs = {"http": HTTPInput}
-_outputs = {"s3": S3Output}
+_inputs = {"http": HTTPInput, "docker": DockerInput}
+_outputs = {"s3": S3Output, "docker": DockerOutput}
 
 
 class Configuration:
