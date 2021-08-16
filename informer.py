@@ -12,6 +12,7 @@ class Informer:
 
     _status: Status = Status.WATING
     _progress = 0
+    _meta = None
 
     _observers = []
 
@@ -49,7 +50,8 @@ class Informer:
             self._progress = value
             self.notify()
 
-    def watch(self, observer):
+    def watch(self, observer, meta=None):
+        self._meta = meta
         if observer not in self._observers:
             self._observers.append(observer)
 
@@ -57,4 +59,4 @@ class Informer:
         if self._observers is None:
             return
         for observer in self._observers:
-            observer.update_progress(self)
+            observer.update_progress(self, self._meta)

@@ -17,10 +17,13 @@ from output import Factory as OutputFactory
 class Manager:
 
     _tasks = []
+    _task_status = {}
+    _progress_bar = None
 
     def __init__(self, cfg: Configuration):
         self.cfg = cfg
         self._console = Console()
+        self._progress_bar = Progress(console=self._console)
         self._tpl_env = Environment(loader=BaseLoader(), autoescape=True)
 
     def _extract_item(self, item, in_dict, out_dict):
@@ -57,7 +60,22 @@ class Manager:
                 # o.set_local_path(i.get_save_path())
                 t_name = "{}({})".format(t["name"], item["title"])
                 task = Task(t_name, i, o)
+                i.watch(self, {"name": t_name, "type": "in"})
+                o.watch(self, {"name": t_name, "type": "out"})
                 self._tasks.append(task)
+
+    def update_progress(self, info, meta=None):
+        if meta is None:
+            return
+        name = meta["name"]
+        if name not in self._task_status.keys():
+            return
+        progress_id = self._task_status[name]
+        if meta["type"] == "in":
+            desc = "{} {}".format(name, "Downloaded" if info.progress == 100 else "Downloading")
+        elif meta["type"] == "out":
+            desc = "{} {}".format(name, "Done" if info.progress == 100 else "Uploading")
+        self._progress_bar.update(progress_id, completed=info.progress, description=desc)
 
     def run(self):
         self._console.print("Generating tasks...")
@@ -65,21 +83,16 @@ class Manager:
         self._console.print("Running tasks...")
         if (self._tasks) == 0:
             self._console.print("No tasks!", style="bold red")
-        with Progress(console=self._console) as progress:
-            for task in self._tasks:
-                task.progress_bar = progress
-                task.progress_id = progress.add_task(task.name + " wating", total=100)
-                task.run()
-        # futures = []
-        # with Progress(console=self._console) as progress:
 
-        #     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        #         for task in self._tasks:
-        #             task.progress_bar = progress
-        #             task.progress_id = progress.add_task(task.name + " wating", total=100)
-        #             # task.run()
-        #             futures.append(executor.submit(task.run))
-        # for future in futures:
-        #     if future.exception() is not None:
-        #         self._console.log(future.result())
+        futures = []
+        with self._progress_bar as progress:
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+                for task in self._tasks:
+                    progress_id = self._progress_bar.add_task(task.name + " wating", total=100)
+                    self._task_status[task.name] = progress_id
+                    futures.append(executor.submit(task.run))
+        for future in futures:
+            if future.exception() is not None:
+                self._console.log(future.result())
         self._console.print("All Done!")
