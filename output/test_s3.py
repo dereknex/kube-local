@@ -15,5 +15,5 @@ class TestS3Output(unittest.TestCase):
         f.write(b"Text file contents")
         f.flush()
         o.remote_prefix = "foo/"
-        o.set_local_path(f.name)
+        o.local_path = f.name
         o.upload()
