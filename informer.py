@@ -1,16 +1,18 @@
 from enum import Enum
 
+
 class Status(Enum):
     ERROR = 0b00
     WATING = 0b01
     IN_PROGRESS = 0b10
     DONE = 0b11
 
-    
+
 class Informer:
 
-    _status:Status = Status.WATING
+    _status: Status = Status.WATING
     _progress = 0
+    _meta = None
 
     _observers = []
 
@@ -34,24 +36,27 @@ class Informer:
 
     @progress.setter
     def progress(self, value):
-        if value <0:
-            value  = 0
-        if value >100 :
+        if value < 0:
+            value = 0
+        if value > 100:
             value = 100
         if value == 100:
             self.status = Status.DONE
-        if value >0 and value < 100:
+        if value > 0 and value < 100:
             self.status = Status.IN_PROGRESS
-        if value ==0:
+        if value == 0:
             self.status = Status.WATING
         if value != self._progress:
             self._progress = value
             self.notify()
 
-    def watch(self, observer):
+    def watch(self, observer, meta=None):
+        self._meta = meta
         if observer not in self._observers:
             self._observers.append(observer)
-    
+
     def notify(self):
+        if self._observers is None:
+            return
         for observer in self._observers:
-            observer.update_progress(self)
+            observer.update_progress(self, self._meta)

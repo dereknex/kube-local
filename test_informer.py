@@ -1,14 +1,16 @@
 import unittest
 from informer import Informer, Status
 
+
 class MockObserver:
 
     reviced_progress = 0
     reviced_status = None
 
-    def update_progress(self, info):
+    def update_progress(self, info, meta=None):
         self.reviced_progress = info.progress
         self.reviced_status = info.status
+
 
 class TestInformer(unittest.TestCase):
     def test_status(self):
@@ -30,4 +32,3 @@ class TestInformer(unittest.TestCase):
         i.progress = 500
         self.assertEqual(m.reviced_progress, 100)
         self.assertEqual(m.reviced_status, Status.DONE)
-        

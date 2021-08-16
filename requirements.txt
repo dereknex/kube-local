@@ -6,3 +6,4 @@ minio==7.1.0
 rich==10.6.0
 PyYAML==5.4.1
 coverage==5.5
+docker==5.0.0
