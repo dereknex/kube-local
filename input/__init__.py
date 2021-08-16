@@ -5,10 +5,9 @@ from input.docker import DockerInput
 
 class Factory(object):
     @staticmethod
-    def create(type, config) -> Input:
-        if type == "http":
+    def create(kind, config) -> Input:
+        if kind == "http":
             return HTTPInput(**config)
-        elif type == "docker":
+        elif kind == "docker":
             return DockerInput(**config)
-        else:
-            raise Exception("Unknown input kind: {}".format(type))
+        raise Exception("Unknown input kind: {}".format(kind))

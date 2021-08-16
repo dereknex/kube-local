@@ -5,10 +5,10 @@ from output.docker import DockerOutput
 
 class Factory:
     @staticmethod
-    def create(type, config):
-        if type == "s3":
+    def create(kind, config) -> Output:
+        if kind == "s3":
             return S3Output(**config)
-        elif type == "docker":
+        elif kind == "docker":
             return DockerOutput(**config)
-        else:
-            raise Exception("Invalid output kind: " + type)
+
+        raise Exception("Invalid output kind: " + kind)
