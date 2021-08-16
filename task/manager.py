@@ -1,9 +1,8 @@
-from task.error import OutputNotFoundError
 from config import Configuration
-from task.error import InputNotFoundError, OutputNotFoundError
 from task.task import Task
 from rich.console import Console
 from rich.progress import Progress
+from informer import Status
 
 from jinja2 import Environment, BaseLoader
 
@@ -72,9 +71,9 @@ class Manager:
             return
         progress_id = self._task_status[name]
         if meta["type"] == "in":
-            desc = "{} {}".format(name, "Downloaded" if info.progress == 100 else "Downloading")
+            desc = "{} {}".format(name, "Downloaded" if info.status == Status.DONE else "Downloading")
         elif meta["type"] == "out":
-            desc = "{} {}".format(name, "Done" if info.progress == 100 else "Uploading")
+            desc = "{} {}".format(name, "Done" if info.status == Status.DONE else "Uploading")
         self._progress_bar.update(progress_id, completed=info.progress, description=desc)
 
     def run(self):
@@ -86,10 +85,9 @@ class Manager:
 
         futures = []
         with self._progress_bar as progress:
-
             with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
                 for task in self._tasks:
-                    progress_id = self._progress_bar.add_task(task.name + " wating", total=100)
+                    progress_id = progress.add_task(task.name + " wating", total=100)
                     self._task_status[task.name] = progress_id
                     futures.append(executor.submit(task.run))
         for future in futures:

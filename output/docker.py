@@ -15,6 +15,7 @@ class DockerOutput(Output):
 
     def upload(self) -> None:
         self._status = Status.IN_PROGRESS
+        self._progress = 0
         self.notify()
         source_image = self.client.images.get(self.source_name)
         source_image.platform = self.platform
@@ -22,4 +23,5 @@ class DockerOutput(Output):
         source_image.tag(target_registry, tag=tag)
         self.client.images.push(self.image)
         self._status = Status.DONE
+        self._progress = 100
         self.notify()
