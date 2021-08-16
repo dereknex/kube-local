@@ -61,6 +61,7 @@ class HTTPInput(Input):
         if not validators.url(self.url):
             raise ValueError(self.url)
         p = self.get_save_path()
+        self.data["local_path"] = p
         r = requests.get(self.url, stream=True)
         self._total_size = self._get_content_length(r)
         if self.sha256sum is not None:

@@ -1,9 +1,12 @@
 import yaml
-from input import HTTPInput, DockerInput
-from output import S3Output, DockerOutput
 
-_inputs = {"http": HTTPInput, "docker": DockerInput}
-_outputs = {"s3": S3Output, "docker": DockerOutput}
+# from input import HTTPInput, DockerInput
+# from output import S3Output, DockerOutput
+
+# _inputs = {"http": HTTPInput, "docker": DockerInput}
+_inputs = ["http", "docker"]
+# _outputs = {"s3": S3Output, "docker": DockerOutput}
+_outputs = ["s3", "docker"]
 
 
 class Configuration:
@@ -35,18 +38,22 @@ class Configuration:
     def _load_inputs(self, node):
         if node is None:
             return
-        for i in node:
-            c = _inputs[i["type"]]
-            i = c(**i)
-            self.inputs[i.name] = i
+        for n in node:
+            if n["kind"] not in _inputs:
+                raise ValueError("%s is not supported", n["kind"])
+            # c = _inputs[i["kind"]]
+            # i = c(**i)
+            self.inputs[n["name"]] = n
 
     def _load_outpus(self, node):
         if node is None:
             return
-        for i in node:
-            c = _outputs[i["type"]]
-            o = c(**i)
-            self.outputs[o.name] = o
+        for n in node:
+            # c = _outputs[i["kind"]]
+            # o = c(**i)
+            if n["kind"] not in _outputs:
+                raise ValueError("%s is not supported", n["kind"])
+            self.outputs[n["name"]] = n
 
     def _load_tasks(self, node):
         if node is None:

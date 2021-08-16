@@ -18,9 +18,12 @@ class Task(object):
 
     def run(self):
         self.in_obj.download()
+        self.out_obj.__dict__.update(self.in_obj.data)
         self.out_obj.upload()
 
     def update_progress(self, info):
+        if self.progress_bar is None:
+            return
         desc = ""
         if info == self.in_obj:
             desc = "{} {}".format(self.name, "Downloaded" if info.progress == 100 else "Downloading")

@@ -6,14 +6,14 @@ from pathlib import Path
 from informer import Informer
 
 
-class Progress(Thread, Informer):
-    def __init__(self):
+class Progress(Thread):
+    def __init__(self, handle):
         Thread.__init__(self)
         self.total_length = 0
         self.object_name = None
+        self.handle = handle
 
         self.current_size = 0
-        self.progress = 0
 
     def set_meta(self, total_length, object_name):
         """
@@ -33,11 +33,13 @@ class Progress(Thread, Informer):
         """
         if not isinstance(size, int):
             raise ValueError("{} type can not be displayed. " "Please change it to Int.".format(type(size)))
-
+        if self.handle is None:
+            return
         self.current_size += size
         if self.total_length > 0:
-            self.progress = int(self.current_size * 100 / self.total_length)
-            self.notify()
+            progress = int(self.current_size * 100 / self.total_length)
+            if progress != self.handle.progress:
+                self.handle.progress = progress
 
 
 class S3Output(Output):
@@ -47,22 +49,11 @@ class S3Output(Output):
     bucket = None
     secure = True
 
-    _local_path = None
+    local_path = None
     remote_prefix = None
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
-
-    @property
-    def local_path(self):
-        return self._local_path
-
-    def set_local_path(self, path: str) -> None:
-        self._local_path = path
-
-    def update_progress(self, info):
-        self.progress = info.progress
-        self.notify()
 
     def upload(self) -> None:
         client = Minio(self.endpoint, self.access_key, self.access_key_secret, secure=self.secure)
@@ -73,7 +64,6 @@ class S3Output(Output):
         remote_path = Path(self.remote_prefix).joinpath(filename)
         progress = None
         if len(self._observers) > 0:
-            progress = Progress()
+            progress = Progress(self)
 
-            progress.watch(self)
         client.fput_object(self.bucket, remote_path.as_posix(), self.local_path, progress=progress)

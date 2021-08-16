@@ -30,7 +30,7 @@ class TestConfiguration(unittest.TestCase):
         local_path: temp/
         inputs:
           - name: kubernetes
-            type: http
+            kind: http
         outputs:
         tasks:
         """
@@ -40,8 +40,9 @@ class TestConfiguration(unittest.TestCase):
         c = Configuration(f.name)
         self.assertEqual(1, len(c.inputs.keys()))
         i = c.inputs["kubernetes"]
-        self.assertIsInstance(i, HTTPInput)
-        self.assertEqual(i.name, "kubernetes")
+        # self.assertIsInstance(i, HTTPInput)
+        self.assertEqual(i["name"], "kubernetes")
+        self.assertEqual(i["kind"], "http")
 
     def test_load_outputs(self):
         data = """
@@ -50,7 +51,7 @@ class TestConfiguration(unittest.TestCase):
             inputs:
             outputs:
               - name: kubernetes
-                type: s3
+                kind: s3
                 bucket: kubernetes
                 access_key: foo
                 access_key_secret: bar
@@ -64,10 +65,10 @@ class TestConfiguration(unittest.TestCase):
         c = Configuration(f.name)
         self.assertEqual(1, len(c.outputs.keys()))
         o = c.outputs["kubernetes"]
-        self.assertIsInstance(o, S3Output)
-        self.assertEqual(o.name, "kubernetes")
-        self.assertEqual(o.bucket, "kubernetes")
-        self.assertEqual(o.access_key, "foo")
-        self.assertEqual(o.access_key_secret, "bar")
-        self.assertEqual(o.endpoint, "localhost:9000")
-        self.assertFalse(o.secure)
+        # self.assertIsInstance(o, S3Output)
+        self.assertEqual(o["name"], "kubernetes")
+        self.assertEqual(o["bucket"], "kubernetes")
+        self.assertEqual(o["access_key"], "foo")
+        self.assertEqual(o["access_key_secret"], "bar")
+        self.assertEqual(o["endpoint"], "localhost:9000")
+        self.assertFalse(o["secure"])

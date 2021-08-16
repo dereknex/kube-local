@@ -19,3 +19,4 @@ class DockerInput(Input):
         self._client.images.pull(self.image, platform=self.platform)
         self._status = Status.DONE
         self.notify()
+        self.data["source_name"] = self.image

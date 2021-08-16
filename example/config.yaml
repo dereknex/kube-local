@@ -2,14 +2,14 @@ auto_clean: true
 local_path: temp/
 inputs:
   - name: http
-    type: http
+    kind: http
   - name: docker
-    type: docker
+    kind: docker
 outputs:
   - name: docker
-    type: docker
+    kind: docker
   - name: kubernetes
-    type: s3
+    kind: s3
     bucket: kubernetes
     access_key: foo
     access_key_secret: bar12345
@@ -48,13 +48,13 @@ tasks:
       - title: v1.20.10
         version: v1.20.10
         sha256sum: a01b54ad1bf4162073c7d51a607e60091b6f053522aaa01334f231b83e7aca25
-  - name: kbue-proxy
+  - name: kube-proxy
     input:
       name: docker
-      image: k8s.gcr.io/kube-proxy:{tag}
+      image: k8s.gcr.io/kube-proxy:{{tag}}
     output:
       name: docker
-      image: registry.nextty.com/kube-proxy:{tag}
+      image: localhost:5000/kube-proxy:{{tag}}
     with_items:
       - title: v1.21.4
         tag: v1.21.4

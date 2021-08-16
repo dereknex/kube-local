@@ -12,10 +12,10 @@ auto_clean: true
 local_path: temp/
 inputs:
   - name: kubernetes
-    type: http
+    kind: http
 outputs:
   - name: kubernetes
-    type: s3
+    kind: s3
     bucket: kubernetes
     access_key: foo
     access_key_secret: bar
@@ -49,16 +49,17 @@ tasks:
         }
         in_dict = {
             "name": "kubernetes",
+            "kind": "http",
             "url": "https://storage.googleapis.com/kubernetes-release/release/{{ version }}/bin/linux/{{ image_arch }}/kubectl",
             "sha256sum": "{{ sha256sum }}",
         }
-        out_dict = {"name": "kubernetes", "remote_prefix": "{{ version }}/linux/{{ image_arch }}/kubectl"}
+        out_dict = {"name": "kubernetes", "kind": "s3", "remote_prefix": "{{ version }}/linux/{{ image_arch }}/kubectl"}
         f = tempfile.NamedTemporaryFile("w")
         f.writelines(self.test_cfg)
         f.flush()
         c = Configuration(f.name)
         m = Manager(c)
-        m._generate_tasks()
+        # m._generate_tasks()
         i, o = m._extract_item(item, in_dict, out_dict)
         self.assertEqual(i.name, "kubernetes")
         self.assertEqual(o.name, "kubernetes")
@@ -76,6 +77,7 @@ tasks:
         f.flush()
         c = Configuration(f.name)
         m = Manager(c)
+        m._generate_tasks()
         self.assertEqual(len(m._tasks), 2, m._tasks)
         t1 = m._tasks[0]
         self.assertEqual(t1.name, "kubectl(v1.21.3)")
