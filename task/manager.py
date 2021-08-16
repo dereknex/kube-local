@@ -35,8 +35,8 @@ class Manager:
                 continue
             out_dict[k] = self._tpl_env.from_string(v).render(**item)
 
-        i = InputFactory.create(type=in_dict["kind"], config=in_dict)
-        o = OutputFactory.create(type=out_dict["kind"], config=out_dict)
+        i = InputFactory.create(kind=in_dict["kind"], config=in_dict)
+        o = OutputFactory.create(kind=out_dict["kind"], config=out_dict)
 
         return (i, o)
 
