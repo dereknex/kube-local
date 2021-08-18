@@ -1,6 +1,6 @@
 # Porter
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ee4a8f2cd32e4e90b34d90a00e85d1cf)](https://www.codacy.com/gh/dereknex/porter/dashboard?utm_source=github.com&utm_medium=referral&utm_content=dereknex/porter&utm_campaign=Badge_Grade) [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/ee4a8f2cd32e4e90b34d90a00e85d1cf)](https://www.codacy.com/gh/dereknex/porter/dashboard?utm_source=github.com&utm_medium=referral&utm_content=dereknex/porter&utm_campaign=Badge_Coverage)
+[![CodeFactor](https://www.codefactor.io/repository/github/dereknex/porter/badge)](https://www.codefactor.io/repository/github/dereknex/porter) [![codecov](https://codecov.io/gh/dereknex/porter/branch/main/graph/badge.svg?token=YCMJ0KX1RP)](https://codecov.io/gh/dereknex/porter)
 
 Porter is a command-line utility that moves file or container images.
 
