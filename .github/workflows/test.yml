@@ -23,11 +23,11 @@ jobs:
         image: registry:2
         ports:
           - 5000:5000
-      registry-private:
-        image: registry:2
-        ports:
-          - 6000:6000
-        options: -v ${{ github.workspace }}/scripts/registry:/etc/docker/registry
+      # registry-private:
+      #   image: registry:2
+      #   ports:
+      #     - 6000:6000
+      #   options: -v ${{ github.workspace }}/scripts/registry:/etc/docker/registry
     strategy:
       matrix:
         python-version: [3.9]
