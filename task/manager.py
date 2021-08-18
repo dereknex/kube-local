@@ -22,7 +22,7 @@ class Manager:
     def __init__(self, cfg: Configuration):
         self.cfg = cfg
         self._console = Console()
-        self._progress_bar = Progress(console=self._console)
+        self._progress_bar = Progress(console=self._console, refresh_per_second=1)
         self._tpl_env = Environment(loader=BaseLoader(), autoescape=True)
 
     def _extract_item(self, item, in_dict, out_dict):
