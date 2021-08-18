@@ -12,6 +12,7 @@ class Informer:
 
     _status: Status = Status.WATING
     _progress = 0
+    _message = ""
     _meta = None
 
     _observers = []
