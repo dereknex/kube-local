@@ -8,6 +8,8 @@ class DockerInput(Input):
     name = ""
     platform = None
     image = None
+    username = None
+    password = None
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -17,7 +19,9 @@ class DockerInput(Input):
         self._status = Status.IN_PROGRESS
         self._progress = 0
         self.notify()
-        self._client.images.pull(self.image, platform=self.platform)
+        self._client.images.pull(
+            self.image, platform=self.platform, auth_config={"username": self.username, "password": self.password}
+        )
         self._status = Status.DONE
         self._progress = 100
         self.notify()
