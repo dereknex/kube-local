@@ -5,9 +5,17 @@ inputs:
     kind: http
   - name: docker
     kind: docker
+  - name: docker_private
+    kind: docker
+    username: brad
+    password: password
 outputs:
   - name: docker
     kind: docker
+  - name: docker_private
+    kind: docker
+    username: brad
+    password: password
   - name: kubernetes
     kind: s3
     bucket: kubernetes

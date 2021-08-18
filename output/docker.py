@@ -8,6 +8,8 @@ class DockerOutput(Output):
     image = None
     platform = None
     name = None
+    username = None
+    password = None
 
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
@@ -17,11 +19,12 @@ class DockerOutput(Output):
         self._status = Status.IN_PROGRESS
         self._progress = 0
         self.notify()
+
         source_image = self.client.images.get(self.source_name)
         source_image.platform = self.platform
         target_registry, tag = self.image.rsplit(":", 1)
         source_image.tag(target_registry, tag=tag)
-        self.client.images.push(self.image)
+        self.client.images.push(self.image, auth_config={"username": self.username, "password": self.password})
         self._status = Status.DONE
         self._progress = 100
         self.notify()

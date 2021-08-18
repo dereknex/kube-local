@@ -1,12 +1,12 @@
-name: "Test"
+name: 'Test'
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ main ]
-  
+    branches: [main]
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -20,9 +20,14 @@ jobs:
           - 9000:9000
         options: --name minio-server
       registry:
-        image: registry:latest
+        image: registry:2
         ports:
           - 5000:5000
+      # registry-private:
+      #   image: registry:2
+      #   ports:
+      #     - 6000:6000
+      #   options: -v ${{ github.workspace }}/scripts/registry:/etc/docker/registry
     strategy:
       matrix:
         python-version: [3.9]
@@ -54,5 +59,3 @@ jobs:
           # or
           # api-token: ${{ secrets.CODACY_API_TOKEN }}
           coverage-reports: cobertura.xml
-      
-
