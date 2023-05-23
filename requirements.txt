@@ -1,6 +1,6 @@
 Jinja2==3.0.1
 click==8.0.1
-requests==2.26.0
+requests==2.31.0
 validators==0.18.2
 minio==7.1.0
 rich==10.6.0
